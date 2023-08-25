@@ -1,56 +1,44 @@
-const url = 'https://open-weather13.p.rapidapi.com/city/';
-const options = {
-	method: 'GET',
-	headers: {
-		'X-RapidAPI-Key': 'b9d973ac46mshcbe116e750218f9p1b2d0cjsn67a1e48f6fac',
-		'X-RapidAPI-Host': 'open-weather13.p.rapidapi.com'
-	}
-};
+/**
+ * Weather App
+ */
 
-const cityInput = document.getElementById('city-input');
+// API_KEY for maps api
+let API_KEY = "a8e71c9932b20c4ceb0aed183e6a83bb";
 
-const weatherOutput = document.getElementById('weather-output');
+/**
+ * Retrieve weather data from openweathermap
+ */
+const getWeatherData = (city) => {
+  const URL = "https://api.openweathermap.org/data/2.5/weather";
+  const FULL_URL = `${URL}?q=${city}&appid=${API_KEY}&units=imperial`;
+  const weatherPromise  = fetch(FULL_URL);
+  return weatherPromise.then((response) => {
+    return response.json();
+  })
+}
 
+/**
+ * Retrieve city input and get the weather data
+ */
 const searchCity = () => {
-    const cityName = cityInput.value.toLowerCase();
-    getWeather(cityName);
+  const city = document.getElementById('city-input').value;
+  getWeatherData(city)
+  .then((res)=>{
+    showWeatherData(res);
+  }).catch((error)=>{
+    console.log(error);
+    console.log("Something happend");
+  })
 }
 
-const getWeather = async(city) => {
-    try {
-        const response = await fetch(`${url}${city}`, options);
-        const result = await response.json();
-        showWeatherData(result);
-    } catch (error) {
-        console.error(error);
-    }
+/**
+ * Show the weather data in HTML
+ */
+showWeatherData = (weatherData) => {
+  document.getElementById("city-name").innerText = weatherData.name;
+  document.getElementById("weather-type").innerText = weatherData.weather[0].main;
+  document.getElementById("temp").innerText = ((weatherData.main.temp - 32) * 5/9).toFixed(2);;
+  document.getElementById("min-temp").innerText = ((weatherData.main.temp_min - 32) * 5/9).toFixed(2);
+  document.getElementById("max-temp").innerText = ((weatherData.main.temp_max - 32) * 5/9).toFixed(2);
 }
 
-const showWeatherData = (weatherData) => {
-    const weatherType = weatherData.weather[0].main;
-    const cityName = weatherData.name;
-    const temps = {
-        Temp: weatherData.main.temp,
-        Min_Temp: weatherData.main.temp_min,
-        Max_Temp: weatherData.main.temp_max
-    };
-
-    const formattedTemps = Object.keys(temps).map(tempKey => {
-        const cel = ((temps[tempKey] - 32) * 5/9).toFixed(2);
-        return `<p>${tempKey}: ${cel}°C</p>`;
-    }).join('');
-
-    const weatherCard = `
-        <div class="card mb-4 shadow-sm">
-            <div class="card-header">
-                <h4 id="city-name" class="my-0 font-weight-normal">${cityName}</h4>
-            </div>
-            <div class="card-body">
-                <h1 id="weather-type" class="card-title">${weatherType}</h1>
-                ${formattedTemps}
-            </div>
-        </div>
-    `;
-
-    weatherOutput.innerHTML = weatherCard;
-}
