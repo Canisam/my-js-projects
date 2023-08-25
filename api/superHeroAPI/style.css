@@ -1,0 +1,51 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+h2 {
+    color: #333;
+}
+
+#sH {
+    padding: 5px;
+    font-size: 16px;
+}
+
+#Search,
+#Btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+#heroImage img {
+    max-width: 100%;
+    height: auto;
+}
+
+#name {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+#stats p {
+    font-size: 18px;
+    margin: 5px;
+}
+
+#stats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Add more styles as needed */
